@@ -1,11 +1,27 @@
 const TELEFONO_WHATSAPP = "51983537632";
 const CLAVE_ALMACENAMIENTO = "nitro_sport_lista_v1";
 
+const modelos = [
+    { codigo: "NITRO-01", nombre: "Modelo 01", descripcion: "Camiseta deportiva sublimada.", imagen: "foto1.jpg" },
+    { codigo: "NITRO-02", nombre: "Modelo 02", descripcion: "Camiseta deportiva sublimada.", imagen: "foto2.jpg" },
+    { codigo: "NITRO-03", nombre: "Modelo 03", descripcion: "Camiseta deportiva sublimada.", imagen: "foto3.jpg" },
+    { codigo: "NITRO-04", nombre: "Modelo 04", descripcion: "Camiseta deportiva sublimada.", imagen: "foto4.jpg" },
+    { codigo: "NITRO-05", nombre: "Modelo 05", descripcion: "Camiseta deportiva sublimada.", imagen: "foto5.jpg" },
+    { codigo: "NITRO-06", nombre: "Modelo 06", descripcion: "Camiseta deportiva sublimada.", imagen: "foto6.jpg" },
+    { codigo: "NITRO-07", nombre: "Modelo 07", descripcion: "Camiseta deportiva sublimada.", imagen: "foto7.jpg" },
+    { codigo: "NITRO-08", nombre: "Modelo 08", descripcion: "Camiseta deportiva sublimada.", imagen: "foto8.jpg" },
+    { codigo: "NITRO-09", nombre: "Modelo 09", descripcion: "Camiseta deportiva sublimada.", imagen: "foto9.jpg" },
+    { codigo: "NITRO-10", nombre: "Modelo 10", descripcion: "Camiseta deportiva sublimada.", imagen: "foto10.jpg" },
+    { codigo: "NITRO-11", nombre: "Modelo 11", descripcion: "Camiseta deportiva sublimada.", imagen: "foto11.jpg" },
+    { codigo: "NITRO-12", nombre: "Modelo 12", descripcion: "Camiseta deportiva sublimada.", imagen: "foto12.jpg" },
+    { codigo: "NITRO-13", nombre: "Modelo 13", descripcion: "Camiseta deportiva sublimada.", imagen: "foto13.jpg" },
+    { codigo: "NITRO-14", nombre: "Modelo 14", descripcion: "Camiseta deportiva sublimada.", imagen: "foto14.jpg" },
+    { codigo: "NITRO-15", nombre: "Modelo 15", descripcion: "Camiseta deportiva sublimada.", imagen: "foto15.jpg" },
+    { codigo: "NITRO-16", nombre: "Modelo 16", descripcion: "Camiseta deportiva sublimada.", imagen: "foto16.jpg" }
+];
 
+const TALLAS_DISPONIBLES = ["Niño", "S", "M", "L", "XL", "XXL"];
 
-const TALLAS_DISPONIBLES = [ "6","8","10","12","14","16","S", "M", "L", "XL", "XXL"];
-
-// Cambiar entre Catálogo y Crea tu lista
 function cambiarSeccion(seccion) {
     const catalogoEl = document.getElementById("catalogo");
     const seccionListaEl = document.getElementById("seccion-lista");
@@ -30,6 +46,7 @@ function cambiarSeccion(seccion) {
 
 function mostrarCatalogo(lista) {
     const contenedor = document.getElementById("catalogo");
+    if (!contenedor) return;
     contenedor.innerHTML = "";
 
     lista.forEach((item) => {
@@ -94,8 +111,6 @@ function pedirPorWhatsapp(codigo, nombre, imagen) {
     window.open(url, "_blank");
 }
 
-// --- FUNCIONES DE "CREA TU LISTA" ---
-
 function crearElementoFila(datos = { nombre: "", numero: "", talla: "M" }) {
     const tr = document.createElement("tr");
 
@@ -157,7 +172,7 @@ function limpiarLista() {
     document.getElementById("descripcion-equipo").value = "";
     const tbody = document.getElementById("cuerpo-tabla-lista");
     tbody.innerHTML = "";
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 5; i++) {
         tbody.appendChild(crearElementoFila());
     }
     renumerarFilas();
@@ -181,6 +196,7 @@ function guardarListaLocal() {
 
 function cargarListaLocal() {
     const tbody = document.getElementById("cuerpo-tabla-lista");
+    if (!tbody) return;
     tbody.innerHTML = "";
 
     const guardado = localStorage.getItem(CLAVE_ALMACENAMIENTO);
@@ -193,9 +209,7 @@ function cargarListaLocal() {
                 renumerarFilas();
                 return;
             }
-        } catch (e) {
-            // Si hay algún dato corrupto, crea filas limpias
-        }
+        } catch (e) {}
     }
 
     for (let i = 0; i < 5; i++) {
@@ -204,31 +218,88 @@ function cargarListaLocal() {
     renumerarFilas();
 }
 
-function enviarListaPorWhatsapp() {
+function obtenerDatosLista() {
     const descripcion = document.getElementById("descripcion-equipo").value.trim();
     const registros = [];
 
-    document.querySelectorAll("#cuerpo-tabla-lista tr").forEach((tr, idx) => {
+    document.querySelectorAll("#cuerpo-tabla-lista tr").forEach((tr) => {
         const nombre = tr.querySelector(".inp-nombre").value.trim();
         const numero = tr.querySelector(".inp-numero").value.trim();
-        const talla = tr.querySelector(".sel-talla").value;
+        const talla = tr.querySelector(".sel-talla").value.trim();
 
         if (nombre || numero) {
-            registros.push(`${idx + 1}. *Nombre:* ${nombre || "-"} | *N°:* ${numero || "-"} | *Talla:* ${talla}`);
+            registros.push({ nombre, numero, talla });
         }
     });
 
+    return { descripcion, registros };
+}
+
+function escaparCSV(valor) {
+    const texto = String(valor ?? "");
+    if (texto.includes(",") || texto.includes('"') || texto.includes("\n")) {
+        return `"${texto.replace(/"/g, '""')}"`;
+    }
+    return texto;
+}
+
+function descargarCSV() {
+    const { descripcion, registros } = obtenerDatosLista();
+
     if (!descripcion && registros.length === 0) {
-        alert("Escribe el nombre/descripción del equipo o agrega al menos un nombre o número antes de enviar.");
-        return;
+        alert("Escribe el nombre del equipo o agrega al menos un jugador para descargar el CSV.");
+        return null;
     }
 
-    let mensaje = `Hola NITRO SPORT, quiero enviar mi lista de pedido:\n`;
+    const lineas = [];
     if (descripcion) {
-        mensaje += `*Descripción / Equipo:* ${descripcion}\n`;
+        lineas.push(`EQUIPO,${escaparCSV(descripcion)}`);
     }
-    if (registros.length > 0) {
-        mensaje += `\n*Detalle de jugadores / prendas:*\n${registros.join("\n")}`;
+    lineas.push("NAME,NUMBER,SIZE");
+
+    registros.forEach((r) => {
+        lineas.push(`${escaparCSV(r.nombre)},${escaparCSV(r.numero)},${escaparCSV(r.talla)}`);
+    });
+
+    const contenidoCSV = "\uFEFF" + lineas.join("\n");
+    const blob = new Blob([contenidoCSV], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+
+    const nombreLimpio = (descripcion || "lista_equipo")
+        .toLowerCase()
+        .replace(/[^a-z0-9-_]+/g, "_")
+        .replace(/^_+|_+$/g, "");
+
+    const nombreArchivo = `${nombreLimpio || "lista_equipo"}.csv`;
+
+    const enlace = document.createElement("a");
+    enlace.href = url;
+    enlace.download = nombreArchivo;
+    document.body.appendChild(enlace);
+    enlace.click();
+    document.body.removeChild(enlace);
+    URL.revokeObjectURL(url);
+
+    return { descripcion, registros, nombreArchivo };
+}
+
+function enviarListaPorWhatsapp() {
+    const resultado = descargarCSV();
+    if (!resultado) return;
+
+    const { descripcion, registros, nombreArchivo } = resultado;
+
+    const lineasTexto = registros.map((r, idx) =>
+        `${idx + 1}. *Nombre:* ${r.nombre || "-"} | *N°:* ${r.numero || "-"} | *Talla:* ${r.talla}`
+    );
+
+    let mensaje = `Hola NITRO SPORT, envío mi lista de pedido:\n` +
+                  `*Equipo / Descripción:* ${descripcion || "Sin especificar"}\n` +
+                  `*Total de prendas:* ${registros.length}\n` +
+                  `*Archivo CSV generado:* ${nombreArchivo}\n`;
+
+    if (lineasTexto.length > 0) {
+        mensaje += `\n*Detalle:*\n${lineasTexto.join("\n")}`;
     }
 
     const url = `https://wa.me/${TELEFONO_WHATSAPP}?text=${encodeURIComponent(mensaje)}`;
@@ -239,6 +310,5 @@ document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") cerrarModalModelo();
 });
 
-// Carga inicial
 mostrarCatalogo(modelos);
 cargarListaLocal();
