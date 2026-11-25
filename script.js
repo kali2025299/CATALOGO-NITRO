@@ -1,24 +1,7 @@
 const TELEFONO_WHATSAPP = "51983537632";
 const CLAVE_ALMACENAMIENTO = "nitro_sport_lista_v1";
 
-const modelos = [
-    { codigo: "NITRO-01", nombre: "Modelo 01", descripcion: "Camiseta deportiva sublimada.", imagen: "modelos/foto1.jpg" },
-    { codigo: "NITRO-02", nombre: "Modelo 02", descripcion: "Camiseta deportiva sublimada.", imagen: "modelos/foto2.jpg" },
-    { codigo: "NITRO-03", nombre: "Modelo 03", descripcion: "Camiseta deportiva sublimada.", imagen: "modelos/foto3.jpg" },
-    { codigo: "NITRO-04", nombre: "Modelo 04", descripcion: "Camiseta deportiva sublimada.", imagen: "modelos/foto4.jpg" },
-    { codigo: "NITRO-05", nombre: "Modelo 05", descripcion: "Camiseta deportiva sublimada.", imagen: "modelos/foto5.jpg" },
-    { codigo: "NITRO-06", nombre: "Modelo 06", descripcion: "Camiseta deportiva sublimada.", imagen: "modelos/foto6.jpg" },
-    { codigo: "NITRO-07", nombre: "Modelo 07", descripcion: "Camiseta deportiva sublimada.", imagen: "modelos/foto7.jpg" },
-    { codigo: "NITRO-08", nombre: "Modelo 08", descripcion: "Camiseta deportiva sublimada.", imagen: "modelos/foto8.jpg" },
-    { codigo: "NITRO-09", nombre: "Modelo 09", descripcion: "Camiseta deportiva sublimada.", imagen: "modelos/foto9.jpg" },
-    { codigo: "NITRO-10", nombre: "Modelo 10", descripcion: "Camiseta deportiva sublimada.", imagen: "modelos/foto10.jpg" },
-    { codigo: "NITRO-11", nombre: "Modelo 11", descripcion: "Camiseta deportiva sublimada.", imagen: "modelos/foto11.jpg" },
-    { codigo: "NITRO-12", nombre: "Modelo 12", descripcion: "Camiseta deportiva sublimada.", imagen: "modelos/foto12.jpg" },
-    { codigo: "NITRO-13", nombre: "Modelo 13", descripcion: "Camiseta deportiva sublimada.", imagen: "modelos/foto13.jpg" },
-    { codigo: "NITRO-14", nombre: "Modelo 14", descripcion: "Camiseta deportiva sublimada.", imagen: "modelos/foto14.jpg" },
-    { codigo: "NITRO-15", nombre: "Modelo 15", descripcion: "Camiseta deportiva sublimada.", imagen: "modelos/foto15.jpg" },
-    { codigo: "NITRO-16", nombre: "Modelo 16", descripcion: "Camiseta deportiva sublimada.", imagen: "modelos/foto16.jpg" }
-];
+
 
 const TALLAS_DISPONIBLES = [ "6","8","10","12","14","16","S", "M", "L", "XL", "XXL"];
 
