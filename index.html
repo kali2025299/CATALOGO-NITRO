@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NITRO SPORT - Catálogo de Camisetas</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="header-fijo">
+        <div class="header-contenido">
+            <div class="logo-contenedor">
+                <img src="/LOGO NITRO/LOGO NITRO.png" alt="Logo NITRO SPORT">
+            </div>
+
+            <div class="titulo-buscador">
+                <h1>NITRO SPORT — CATÁLOGO DE CAMISETAS</h1>
+                <p>Elige tu moldelo y cotiza directo por WhatsApp</p>
+
+                <!-- Menú de navegación -->
+                <nav class="nav-principal">
+                    <button type="button" id="btn-nav-catalogo" class="nav-btn activo" onclick="cambiarSeccion('catalogo')">
+                        Catálogo de Modelos
+                    </button>
+                    <button type="button" id="btn-nav-lista" class="nav-btn" onclick="cambiarSeccion('lista')">
+                        Crea tu lista
+                    </button>
+                </nav>
+
+                <!-- Buscador (visible en la vista de catálogo) -->
+                <div class="buscador-contenedor" id="contenedor-buscador">
+                    <input type="text" id="buscador" placeholder="Buscar por código o nombre (ej: NITRO-01, Modelo 5)..." onkeyup="filtrarModelos()">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- SECCIÓN 1: CATÁLOGO -->
+    <main class="contenedor-catalogo" id="catalogo"></main>
+
+    <!-- SECCIÓN 2: CREA TU LISTA -->
+    <section class="seccion-lista oculto" id="seccion-lista">
+        <div class="tarjeta-lista">
+            <div class="encabezado-lista">
+                <h2>Crea tu lista de jugadores / pedido</h2>
+                <p>Escribe la descripción o nombre del equipo y completa nombres, números y tallas.</p>
+            </div>
+
+            <div class="campo-descripcion-equipo">
+                <label for="descripcion-equipo">Descripción / Nombre de equipo:</label>
+                <input type="text" id="descripcion-equipo" placeholder="Ej: Equipo Deportivo Halcones — Modelo NITRO-03" oninput="guardarListaLocal()">
+            </div>
+
+            <div class="tabla-responsive">
+                <table class="tabla-jugadores">
+                    <thead>
+                        <tr>
+                            <th style="width: 60px;">#</th>
+                            <th>Nombre</th>
+                            <th style="width: 120px;">Número</th>
+                            <th style="width: 140px;">Talla</th>
+                            <th style="width: 70px;">eliminar</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cuerpo-tabla-lista"></tbody>
+                </table>
+            </div>
+
+            <div class="acciones-lista">
+                <button type="button" class="btn-secundario" onclick="agregarFila()">+ Agregar fila</button>
+                <button type="button" class="btn-peligro" onclick="limpiarLista()">Limpiar lista</button>
+                <button type="button" class="btn-whatsapp btn-enviar-lista" onclick="enviarListaPorWhatsapp()">
+                    Enviar lista por WhatsApp
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ventana individual al seleccionar un modelo -->
+    <div id="modal-modelo" class="modal-modelo" onclick="cerrarModalModelo(event)">
+        <div class="modal-tarjeta" onclick="event.stopPropagation()">
+            <button type="button" class="btn-cerrar-modal" onclick="cerrarModalModelo()">✕</button>
+
+            <div class="modal-imagen-grande">
+                <img id="modal-img" src="" alt="Modelo seleccionado">
+            </div>
+
+            <div class="modal-detalles">
+                <span id="modal-codigo" class="codigo-badge"></span>
+                <h2 id="modal-titulo"></h2>
+                <p id="modal-descripcion" class="modal-descripcion"></p>
+
+                <button type="button" id="modal-btn-whatsapp" class="btn-whatsapp">
+                    Cotizar por WhatsApp
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
